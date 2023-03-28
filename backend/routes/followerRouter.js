@@ -3,6 +3,9 @@ const followController = require("../controllers/followerController");
 
 const router = express.Router();
 
-router.get("/:id", followController.getAllFollowers);
+router
+  .route("/:id")
+  .get(followController.getAllFollowers)
+  .post(followController.addFollower);
 
 module.exports = router;

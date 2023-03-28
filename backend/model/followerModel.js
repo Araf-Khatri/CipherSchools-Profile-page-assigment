@@ -1,13 +1,24 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const followerSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.ObjectId,
-    required: [true, "follower must follow someone"],
+    ref: 'User',
+    required: [true, "current user ID missing"],
   },
-  followedBy: {
+  follower: {
     type: mongoose.Schema.ObjectId,
-    required: [true, "it should be empty"],
+    ref: 'User',
+    unique: true,
+    required: [true, "must be a userId"],
+    validate: {
+      validator: function (el) {
+        console.log(el, this.userId)
+        return el !== this.userId;
+      },
+      message: 'user not allowed to follow itself',
+    },
   },
 });
 
