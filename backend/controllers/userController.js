@@ -1,5 +1,7 @@
 const Socials = require("../model/socialsModel");
 const User = require("../model/userModel");
+
+const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 
 const updateUserSocials = async (userId, data = {}, response) => {
@@ -40,9 +42,8 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
   if (type === "socials") {
     // data: {linkedIn, github, facebook, twitter, instagram, website}
     await updateUserSocials(id, data, res);
-  } else if (type === "profile") {
+  } else if (type === "profile" || type === "about") {
     await updateUserProfile(id, data, res);
-    console.log("profile error");
   }
 });
 

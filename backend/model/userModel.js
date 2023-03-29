@@ -46,6 +46,9 @@ const userSchema = new mongoose.Schema(
         message: "Password are not the same!",
       },
     },
+    about: {
+      type: String,
+    },
     socials: {
       type: mongoose.Schema.ObjectId,
       ref: "Socials",

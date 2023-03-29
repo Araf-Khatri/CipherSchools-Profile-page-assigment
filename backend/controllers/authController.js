@@ -3,7 +3,7 @@ const AppError = require("../utils/appError");
 const catchAsync = require("./../utils/catchAsync");
 
 exports.signup = catchAsync(async (req, res, next) => {
-  await User.create({
+  const user = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
@@ -12,6 +12,11 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: "success",
+    data: {
+      id: user._id,
+      name: user.name,
+      email:user.email
+    }
   });
 });
 
