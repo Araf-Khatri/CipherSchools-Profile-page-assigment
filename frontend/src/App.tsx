@@ -1,8 +1,10 @@
+import Axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import PopupAuth from "./Components/popup-auth";
 import useHttp from "./Hooks/use-http";
 import AboutMe from "./Layout/about-me";
+import Interests from "./Layout/interests";
 import OntheWeb from "./Layout/on-the-web";
 import ProfessionalInfo from "./Layout/professional-info";
 import ProfileNav from "./Layout/profile";
@@ -10,9 +12,9 @@ import ProfileNav from "./Layout/profile";
 interface UserData {
   name: String;
   email: String;
-  interests?: String[];
   followers: Number;
-  about: String;
+  interests?: String[];
+  about?: String;
 }
 
 function App() {
@@ -28,7 +30,22 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // 
+    const userId: String | null = localStorage.getItem("userId");
+    //
+    const fetchData = async () => {
+      const { data: response } = await Axios.get(
+        `http://127.0.0.1:3090/api/user/profile/${userId}`
+      );
+      const { userData, followers, socials } = response.data;
+      console.log(userData, followers, socials);
+      const data = {
+        ...userData,
+        followers,
+        socials,
+      };
+      console.log(data)
+    };
+    fetchData();
   }, [isLoggedIn]);
 
   if (!isLoggedIn) {
@@ -40,17 +57,17 @@ function App() {
   }
 
   return (
-    <div className="App bg-slate-100 text-slate-900">
+    <div className="relative App bg-slate-100 text-slate-900">
+      <ProfileNav />
       <Routes>
         <Route
           path="/"
           element={
             <Fragment>
-              <ProfileNav />
               <AboutMe />
               <OntheWeb />
               <ProfessionalInfo />
-              <div className="h-screen"></div>
+              <Interests />
             </Fragment>
           }
         />

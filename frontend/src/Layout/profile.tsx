@@ -11,15 +11,9 @@ interface UserData {
   about: String;
 }
 
-const ProfileNav: FC = () => {
-  useEffect(() => {
-    async function fetchProfileData() {
-      // await Axios.get();
-    }
-  });
-
+const ProfileNav: FC = ({}) => {
   return (
-    <div className="sticky z-50 top-0 bg-white">
+    <div className="sticky z-30 top-0 bg-white shadow-sm">
       <Section >
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -31,11 +25,11 @@ const ProfileNav: FC = () => {
             </div>
           </div>
           <NavLink to={"/followers"}>
-            {/* <p className="cursor-default">
+            <p className="cursor-default">
               {`
-              ${">>"} ${profileData?.followers || ""} followers
+              ${">>"} followers
             `}
-            </p> */}
+            </p>
           </NavLink>
         </div>
       </Section>

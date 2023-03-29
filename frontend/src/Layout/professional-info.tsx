@@ -22,7 +22,7 @@ const userCurrentStatus: String[] = [
 const ProfessionalInfo: FC = () => {
   return (
     <div>
-      <Section>
+      <Section border={true}>
         <LayoutHeading
           heading={"PROFESSIONAL INFORMATION"}
           onclick={() => {}}
