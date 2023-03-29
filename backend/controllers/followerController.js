@@ -3,17 +3,11 @@ const catchAsync = require("../utils/catchAsync");
 
 exports.getAllFollowers = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const allFollowers = await Follower.aggregate([
-    {
-      $match: { userId: id },
-    },
-    {
-      $sort: { follower: 1 },
-    },
-    {
-      $limit: 5,
-    },
-  ]);
+  const { limit, page } = req.query;
+
+  const allFollowers = await Follower.find({ userId: id })
+    .skip((+page - 1) * +limit)
+    .limit(limit);
 
   res.status(200).json({
     status: "success",
