@@ -11,8 +11,15 @@ const userSchema = new mongoose.Schema(
     profilePhoto: {
       type: String, // IMPORTANT
     },
-    phoneNo: {
+    mobileNo: {
       type: Number,
+      validate: {
+        validator: (el) => {
+          console.log(el)
+          return Number.toString(el).length === 10
+        },
+        message: 'Mobile Number must contain 10 characters'
+      }
     },
     email: {
       type: String,

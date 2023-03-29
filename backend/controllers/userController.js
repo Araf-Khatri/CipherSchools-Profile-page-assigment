@@ -2,21 +2,33 @@ const Socials = require("../model/socialsModel");
 const User = require("../model/userModel");
 const catchAsync = require("../utils/catchAsync");
 
-const updateUser = async (Model, userId, newData = {}, response) => {
-  let data = await Model.findOneAndUpdate({ userId: userId }, newData, {
+const updateUserSocials = async (userId, data = {}, response) => {
+  let socialsData = await Socials.findOneAndUpdate({ userId: userId }, data, {
     new: true,
+    runValidators: true,
   });
-  if (!data) {
-    data = await Model.create({
+  if (!socialsData) {
+    socialsData = await Socials.create({
       userId: userId,
-      ...newData,
+      ...data,
     });
-    data.save({ validator: true });
+    socialsData.save({ validator: true });
   }
 
   response.status(200).json({
     status: "success",
-    data: data,
+    data: socialsData,
+  });
+};
+
+const updateUserProfile = async (userId, data, response) => {
+  const userData = await User.findByIdAndUpdate(userId, data, {
+    new: true,
+    runValidators: true,
+  });
+  response.status(200).json({
+    status: "success",
+    data: userData,
   });
 };
 
@@ -27,9 +39,10 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
 
   if (type === "socials") {
     // data: {linkedIn, github, facebook, twitter, instagram, website}
-    updateUser(Socials, id, data, res);
+    await updateUserSocials(id, data, res);
   } else if (type === "profile") {
-    updateUser(User, id, data, res);
+    await updateUserProfile(id, data, res);
+    console.log("profile error");
   }
 });
 
