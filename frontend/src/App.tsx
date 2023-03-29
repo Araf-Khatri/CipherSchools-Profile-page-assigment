@@ -3,6 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import PopupAuth from "./Components/popup-auth";
 import useHttp from "./Hooks/use-http";
 import AboutMe from "./Layout/about-me";
+import OntheWeb from "./Layout/on-the-web";
+import ProfessionalInfo from "./Layout/professional-info";
 import ProfileNav from "./Layout/profile";
 
 interface UserData {
@@ -16,11 +18,6 @@ interface UserData {
 function App() {
   const userId = localStorage.getItem("userId");
   const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
-  const [data, setData] = useState<UserData | null>(null);
-  const { sendRequest, error, isLoading } = useHttp(
-    `http://127.0.0.1:3090/api/user/profile/${userId}`,
-    "GET"
-  );
 
   useEffect(() => {
     const userId: String | null = localStorage.getItem("userId");
@@ -42,17 +39,18 @@ function App() {
     );
   }
 
-  console.log(data);
   return (
-    <div className="App text-slate-900">
+    <div className="App bg-slate-100 text-slate-900">
       <Routes>
         <Route
           path="/"
           element={
             <Fragment>
-              <ProfileNav profileData={data} />
+              <ProfileNav />
               <AboutMe />
-              <div className="bg-slate-50 h-screen"></div>
+              <OntheWeb />
+              <ProfessionalInfo />
+              <div className="h-screen"></div>
             </Fragment>
           }
         />
