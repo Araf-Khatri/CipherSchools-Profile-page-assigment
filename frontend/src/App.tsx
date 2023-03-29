@@ -1,17 +1,38 @@
 import { Fragment, useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import PopupAuth from "./Components/popup-auth";
+import useHttp from "./Hooks/use-http";
+import AboutMe from "./Layout/about-me";
 import ProfileNav from "./Layout/profile";
 
+interface UserData {
+  name: String;
+  email: String;
+  interests?: String[];
+  followers: Number;
+  about: String;
+}
+
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const userId = localStorage.getItem("userId");
+  const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
+  const [data, setData] = useState<UserData | null>(null);
+  const { sendRequest, error, isLoading } = useHttp(
+    `http://127.0.0.1:3090/api/user/profile/${userId}`,
+    "GET"
+  );
 
   useEffect(() => {
-    const userId = localStorage.getItem('userId')
+    const userId: String | null = localStorage.getItem("userId");
 
     if (userId) {
-      setIsLoggedIn(true)
+      setIsLoggedIn(true);
     }
   }, []);
+
+  useEffect(() => {
+    // 
+  }, [isLoggedIn]);
 
   if (!isLoggedIn) {
     return (
@@ -20,11 +41,23 @@ function App() {
       </div>
     );
   }
- 
+
+  console.log(data);
   return (
     <div className="App text-slate-900">
-      <ProfileNav />
-      <div className="bg-slate-50 h-screen"></div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Fragment>
+              <ProfileNav profileData={data} />
+              <AboutMe />
+              <div className="bg-slate-50 h-screen"></div>
+            </Fragment>
+          }
+        />
+        <Route path="/followers" element={<p>Followers Page</p>} />
+      </Routes>
     </div>
   );
 }

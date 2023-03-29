@@ -8,9 +8,8 @@ router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.post("/change-password", authController.changePassword);
 
+router.get("/profile/:id", userController.getUserData);
 router.post("/update-profile/:id", userController.updateProfile);
 router.post("/update-interests/:id", userController.updateInterest);
-
-
 
 module.exports = router;

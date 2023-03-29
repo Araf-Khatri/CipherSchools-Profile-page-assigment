@@ -15,11 +15,11 @@ const userSchema = new mongoose.Schema(
       type: Number,
       validate: {
         validator: (el) => {
-          console.log(el)
-          return Number.toString(el).length === 10
+          console.log(el);
+          return Number.toString(el).length === 10;
         },
-        message: 'Mobile Number must contain 10 characters'
-      }
+        message: "Mobile Number must contain 10 characters",
+      },
     },
     email: {
       type: String,
@@ -67,6 +67,11 @@ userSchema.pre("save", async function (next) {
 
   this.passwordConfirm = undefined;
   next();
+});
+
+userSchema.post(/^find/g, function (docs, next) {
+  docs = docs.select("-__v");
+  next()
 });
 
 userSchema.methods.correctPassword = async function (

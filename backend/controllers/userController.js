@@ -1,4 +1,6 @@
 const Socials = require("../model/socialsModel");
+const Follower = require("../model/followerModel");
+
 const User = require("../model/userModel");
 
 const AppError = require("../utils/appError");
@@ -57,6 +59,20 @@ exports.updateInterest = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: userData,
+  });
+});
+
+exports.getUserData = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const userData = await User.findById(id).select('-__v -_id');
+  const totalFollowers = (await Follower.find({ userId: id })).length;
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      userData,
+      followers: totalFollowers,
+    },
   });
 });
 
