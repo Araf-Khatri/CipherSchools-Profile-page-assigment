@@ -64,14 +64,17 @@ exports.updateInterest = catchAsync(async (req, res, next) => {
 
 exports.getUserData = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const userData = await User.findById(id).select('-__v -_id');
+  const userData = await User.findById(id);
   const totalFollowers = (await Follower.find({ userId: id })).length;
+  const socials = await Socials.find({ userId: id });
+
 
   res.status(200).json({
     status: "success",
     data: {
       userData,
       followers: totalFollowers,
+      socials: socials[0]
     },
   });
 });

@@ -6,6 +6,6 @@ const router = express.Router();
 router
   .route("/:id")
   .get(followController.getAllFollowers)
-  .post(followController.addFollower);
+  .put(followController.addFollower);
 
 module.exports = router;

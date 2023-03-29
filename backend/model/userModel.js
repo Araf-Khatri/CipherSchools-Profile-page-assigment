@@ -49,12 +49,27 @@ const userSchema = new mongoose.Schema(
     about: {
       type: String,
     },
+    highestEducation: String,
+    currentStatus: String,
     socials: {
       type: mongoose.Schema.ObjectId,
       ref: "Socials",
     },
-    interests: Array,
+    interests: {
+      type: Array,
+      // enum: [
+      //   "App Development",
+      //   "Web Development",
+      //   "Game Development",
+      //   "Data Structures",
+      //   "Programming",
+      //   "Machine Learning",
+      //   "Data Science",
+      //   "Others",
+      // ],
+    },
   },
+
   {
     toObject: { virtuals: true },
   }
@@ -69,9 +84,9 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.post(/^find/g, function (docs, next) {
-  docs = docs.select("-__v");
-  next()
+userSchema.pre(/^find/, function (next) {
+  this.select("-__v -_id");
+  next();
 });
 
 userSchema.methods.correctPassword = async function (

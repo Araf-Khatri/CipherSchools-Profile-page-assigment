@@ -6,10 +6,16 @@ const router = express.Router();
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
-router.post("/change-password", authController.changePassword);
+router.patch("/password", authController.changePassword);
 
-router.get("/profile/:id", userController.getUserData);
-router.post("/update-profile/:id", userController.updateProfile);
-router.post("/update-interests/:id", userController.updateInterest);
+router
+  .route("/profile/:id")
+  .get(userController.getUserData)
+  .patch(userController.updateProfile);
+
+  
+router
+  .route("/interests/:id")
+  .patch(userController.updateInterest);
 
 module.exports = router;

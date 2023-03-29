@@ -2,7 +2,7 @@ const AppError = require("../utils/appError");
 
 const handleCastErrorDB = (err) => {
   const message = `Invalid ${err.path}: ${err.value}`;
-  return new AppError(message, 400);
+  return new AppError(message, 404);
 };
 
 const handlerDuplicateFieldsDB = (err) => {
@@ -14,7 +14,6 @@ const handlerDuplicateFieldsDB = (err) => {
 
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
-  console.log(errors)
   const message = `Invalid input data. ${errors.join(". ")}`;
   return new AppError(message, 400);
 };
@@ -24,7 +23,7 @@ const sendError = (err, req, res) => {
   if (req.originalUrl.startsWith("/api")) {
     return res.status(err.statusCode).json({
       status: err.status,
-      message: err._message,
+      message: err.message,
     });
   }
 };
@@ -37,6 +36,7 @@ module.exports = (err, req, res, next) => {
   else {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || "error";
+    err.message = 'Internal Server Error'
   }
   sendError(err, req, res);
 };
