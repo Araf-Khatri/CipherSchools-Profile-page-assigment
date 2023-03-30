@@ -85,7 +85,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.pre(/^find/, function (next) {
-  this.select("-__v -_id");
+  this.select("-__v");
   next();
 });
 

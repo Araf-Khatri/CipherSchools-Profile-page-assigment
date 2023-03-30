@@ -34,9 +34,10 @@ module.exports = (err, req, res, next) => {
   else if (err.code === 11000) err = handlerDuplicateFieldsDB(err);
   else if (err.name === "ValidationError") err = handleValidationErrorDB(err);
   else {
+    console.log(err.message);
     err.statusCode = err.statusCode || 500;
     err.status = err.status || "error";
-    err.message = 'Internal Server Error'
+    err.message = err.message || "Internal Server Error";
   }
   sendError(err, req, res);
 };

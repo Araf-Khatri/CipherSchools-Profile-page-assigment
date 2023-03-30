@@ -1,5 +1,13 @@
 import Axios from "axios";
-import { FC, FormEvent, useRef } from "react";
+import {
+  FC,
+  FormEvent,
+  Fragment,
+  ReactElement,
+  ReactNode,
+  useEffect,
+  useRef,
+} from "react";
 import useHttp from "../../Hooks/use-http";
 
 interface LoginData {
@@ -19,6 +27,19 @@ const Login: FC<LoginProps> = ({ inputClass }: LoginProps) => {
     "POST"
   );
 
+  let errorPopup: ReactNode = <div>ABC</div>;
+  useEffect(() => {
+    if (error.error) {
+      errorPopup = (
+        <div className="p-3">
+          <p className="font-semibold">{error.message}</p>
+        </div>
+      );
+    } else {
+      errorPopup = <Fragment></Fragment>;
+    }
+  }, [error]);
+
   const loginHandler = (e: FormEvent) => {
     e.preventDefault();
 
@@ -37,44 +58,47 @@ const Login: FC<LoginProps> = ({ inputClass }: LoginProps) => {
     };
     sendRequest(data)
       .then((res) => {
+        console.log(res);
         localStorage.setItem("userId", res.data.id);
-        window.location.reload()
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
   return (
-    <form onSubmit={loginHandler} className="flex flex-col gap-8">
-      <div>
-        <div className="flex flex-col">
-          <label htmlFor="email">Email:</label>
-          <input
-            type={"email"}
-            className={`${inputClass}`}
-            id="email"
-            required
-            ref={emailRef}
-          />
+    <Fragment>
+      {errorPopup}
+      <form onSubmit={loginHandler} className="flex flex-col gap-8">
+        <div>
+          <div className="flex flex-col">
+            <label htmlFor="email">Email:</label>
+            <input
+              type={"email"}
+              className={`${inputClass}`}
+              id="email"
+              required
+              ref={emailRef}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="password">Password:</label>
+            <input
+              type={"password"}
+              className={`${inputClass}`}
+              id="password"
+              min={8}
+              required
+              ref={passwordRef}
+            />
+          </div>
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="password">Password:</label>
-          <input
-            type={"password"}
-            className={`${inputClass}`}
-            id="password"
-            min={8}
-            required
-            ref={passwordRef}
-          />
-        </div>
-      </div>
 
-      <button type="submit" className="p-1 bg-slate-900 text-slate-100">
-        {isLoading ? "Loading..." : "Login"}
-      </button>
-    </form>
+        <button type="submit" className="p-1 bg-slate-900 text-slate-100">
+          {isLoading ? "Loading..." : "Login"}
+        </button>
+      </form>
+    </Fragment>
   );
 };
 

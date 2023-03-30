@@ -31,7 +31,7 @@ exports.login = catchAsync(async (req, res, next) => {
     !userData ||
     !(await userData.correctPassword(password, userData.password))
   ) {
-    return next(new AppError("Incorrect email and password", 401));
+    return next(new AppError("Incorrect email and password", 400));
   }
 
   userData.password = undefined;

@@ -9,16 +9,30 @@ import OntheWeb from "./Layout/on-the-web";
 import ProfessionalInfo from "./Layout/professional-info";
 import ProfileNav from "./Layout/profile";
 
+interface SocialsData {
+  linkedIn?: String;
+  github?: String;
+  facebook?: String;
+  twitter?: String;
+  instagram?: String;
+  website?: String;
+}
+
 interface UserData {
   name: String;
+  mobileNo?: String;
   email: String;
   followers: Number;
   interests?: String[];
   about?: String;
+  highestEducation?: String;
+  currentStatus?: String;
+  socials?: SocialsData;
 }
 
 function App() {
   const userId = localStorage.getItem("userId");
+  const [data, setData] = useState<UserData | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
 
   useEffect(() => {
@@ -43,9 +57,13 @@ function App() {
         followers,
         socials,
       };
-      console.log(data)
+      delete data._id;
+      console.log(data);
+      setData(data);
     };
-    fetchData();
+    if (isLoggedIn) {
+      fetchData();
+    }
   }, [isLoggedIn]);
 
   if (!isLoggedIn) {
@@ -55,17 +73,31 @@ function App() {
       </div>
     );
   }
-
   return (
     <div className="relative App bg-slate-100 text-slate-900">
-      <ProfileNav />
+      <ProfileNav
+        profileData={{
+          name: data?.name,
+          email: data?.email,
+          followers: data?.followers,
+        }}
+      />
       <Routes>
         <Route
           path="/"
           element={
             <Fragment>
-              <AboutMe />
-              <OntheWeb />
+              <AboutMe aboutData={data?.about || ""} />
+              <OntheWeb
+                socialData={{
+                  linkedIn: data?.socials?.linkedIn || "",
+                  github: data?.socials?.github || "",
+                  facebook: data?.socials?.facebook ||"",
+                  twitter: data?.socials?.twitter || "",
+                  instagram: data?.socials?.instagram || "",
+                  website: data?.socials?.website || "",
+                }}
+              />
               <ProfessionalInfo />
               <Interests />
             </Fragment>

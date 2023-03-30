@@ -4,14 +4,22 @@ import { useState } from "react";
 interface Error {
   statusCode: null | Number;
   message: String;
+  error: Boolean;
 }
 
+interface ErrorResponse {
+  status: Number;
+  data: {
+    message: "";
+  };
+}
 
 const useHttp = (url: string, method: String) => {
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const [error, setError] = useState<Error>({
     statusCode: null,
     message: "",
+    error: false,
   });
   const sendRequest = async (data: Object) => {
     try {
@@ -27,8 +35,24 @@ const useHttp = (url: string, method: String) => {
 
       setIsLoading(false);
       return responseData;
-    } catch (err) {
-      console.log(err);
+    } catch (err: Object | unknown) {
+      const response: ErrorResponse = err?.response;
+      console.log(response);
+      setError((error: Error) => ({
+        ...error,
+        statusCode: response.status,
+        message: response.data.message,
+        error: true,
+      }));
+      setIsLoading(false);
+      setTimeout(() => {
+        setError((error: Error) => ({
+          ...error,
+          statusCode: null,
+          message: "",
+          error: false,
+        }));
+      }, 3000);
     }
   };
 
