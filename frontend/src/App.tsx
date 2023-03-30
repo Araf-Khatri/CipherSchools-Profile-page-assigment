@@ -8,6 +8,7 @@ import Interests from "./Layout/interests";
 import OntheWeb from "./Layout/on-the-web";
 import ProfessionalInfo from "./Layout/professional-info";
 import ProfileNav from "./Layout/profile";
+import FollowersPage from "./Page/followers";
 
 interface SocialsData {
   linkedIn?: String;
@@ -22,8 +23,8 @@ interface UserData {
   name: String;
   mobileNo?: String;
   email: String;
-  followers: Number;
-  interests?: String[];
+  followers: number;
+  interests?: string[];
   about?: String;
   highestEducation?: String;
   currentStatus?: String;
@@ -31,14 +32,15 @@ interface UserData {
 }
 
 function App() {
+  localStorage.setItem("userId", "6422c8072641b6df7ed22ae5");
   const userId = localStorage.getItem("userId");
   const [data, setData] = useState<UserData | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
 
   useEffect(() => {
-    const userId: String | null = localStorage.getItem("userId");
+    const userId: string = localStorage.getItem("userId") ?? "";
 
-    if (userId) {
+    if (!["null", "undefined"].includes(userId)) {
       setIsLoggedIn(true);
     }
   }, []);
@@ -51,18 +53,17 @@ function App() {
         `http://127.0.0.1:3090/api/user/profile/${userId}`
       );
       const { userData, followers, socials } = response.data;
-      console.log(userData, followers, socials);
       const data = {
         ...userData,
         followers,
         socials,
       };
       delete data._id;
-      console.log(data);
       setData(data);
     };
+
     if (isLoggedIn) {
-      fetchData();
+      fetchData().catch((err) => setIsLoggedIn(false));
     }
   }, [isLoggedIn]);
 
@@ -73,37 +74,46 @@ function App() {
       </div>
     );
   }
+  console.log(data)
   return (
     <div className="relative App bg-slate-100 text-slate-900">
-      <ProfileNav
-        profileData={{
-          name: data?.name,
-          email: data?.email,
-          followers: data?.followers,
-        }}
-      />
       <Routes>
         <Route
           path="/"
           element={
             <Fragment>
+              <ProfileNav
+                profileData={{
+                  name: data?.name,
+                  email: data?.email,
+                  followers: data?.followers,
+                }}
+              />
               <AboutMe aboutData={data?.about || ""} />
               <OntheWeb
                 socialData={{
                   linkedIn: data?.socials?.linkedIn || "",
                   github: data?.socials?.github || "",
-                  facebook: data?.socials?.facebook ||"",
+                  facebook: data?.socials?.facebook || "",
                   twitter: data?.socials?.twitter || "",
                   instagram: data?.socials?.instagram || "",
                   website: data?.socials?.website || "",
                 }}
               />
-              <ProfessionalInfo />
-              <Interests />
+              <ProfessionalInfo
+                data={{
+                  highestEducation: data?.highestEducation || "",
+                  currentStatus: data?.currentStatus || "",
+                }}
+              />
+              <Interests interests={data?.interests ?? []} />
             </Fragment>
           }
         />
-        <Route path="/followers" element={<p>Followers Page</p>} />
+        <Route
+          path="/followers"
+          element={<FollowersPage followersLength={data?.followers ?? 0} />}
+        />
       </Routes>
     </div>
   );

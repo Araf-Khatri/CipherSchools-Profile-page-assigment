@@ -1,31 +1,30 @@
-import { FC, RefObject, useRef, useState } from "react";
-
+import { EventHandler, FC, RefObject, useRef, useState } from "react";
 
 interface SelectInputProps {
   options: String[];
   heading: String;
+  data: String;
+  onChangeHandler: Function;
+  type: String;
 }
 
 const SelectInput: FC<SelectInputProps> = ({
   options,
   heading,
+  data,
+  onChangeHandler,
+  type,
 }: SelectInputProps) => {
-  const selectRef = useRef<HTMLSelectElement>(null);
-  const [selectedOption, setSelectedOption] = useState<String | undefined>(
-    options[0]
-  );
-
-  const onChangeHandler = () => {
-    setSelectedOption(selectRef.current?.value);
-  };
+  // const selectRef = useRef<HTMLSelectElement>(null);
 
   return (
     <div className="flex flex-col">
       <p>{heading}</p>
       <select
-        ref={selectRef}
+        // ref={selectRef}
         className="p-2 px-4 outline-none bg-white"
-        onChange={onChangeHandler}
+        onChange={(e) => onChangeHandler(e, type)}
+        value={`${data}`}
       >
         {options.map((value, idx) => (
           <option

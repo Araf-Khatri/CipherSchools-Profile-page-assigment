@@ -2,7 +2,7 @@ import { FC, MutableRefObject, ReactNode, useRef, useState } from "react";
 import { RiPencilFill } from "react-icons/ri";
 
 interface SocialLinkProps {
-  key: String;
+  currKey: String;
   social: String;
   icon: ReactNode;
   link: null | String;
@@ -16,9 +16,8 @@ const SocialLink: FC<SocialLinkProps> = ({
   link = null,
   isEditing,
   setData,
-  key
+  currKey,
 }: SocialLinkProps) => {
-  
   return (
     <div className="flex flex-col">
       <p>{social}</p>
@@ -30,7 +29,8 @@ const SocialLink: FC<SocialLinkProps> = ({
               className="bg-transparent h-8 w-10/12 outline-none"
               placeholder={`${social}`}
               type={"url"}
-              onChange={(e) => setData(key, e.target.value)}
+              defaultValue={`${link}`}
+              onChange={(e) => setData(currKey, e.target.value)}
             />
           ) : !link ? (
             <p className="text-slate-500">{social}</p>

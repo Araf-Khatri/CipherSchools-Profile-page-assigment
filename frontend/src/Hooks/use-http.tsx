@@ -31,28 +31,13 @@ const useHttp = (url: string, method: String) => {
       } else if (method === "GET") {
         const response = await Axios.get(url);
         responseData = response.data;
-      }
+      } 
 
       setIsLoading(false);
       return responseData;
     } catch (err: Object | unknown) {
-      const response: ErrorResponse = err?.response;
-      console.log(response);
-      setError((error: Error) => ({
-        ...error,
-        statusCode: response.status,
-        message: response.data.message,
-        error: true,
-      }));
       setIsLoading(false);
-      setTimeout(() => {
-        setError((error: Error) => ({
-          ...error,
-          statusCode: null,
-          message: "",
-          error: false,
-        }));
-      }, 3000);
+
     }
   };
 

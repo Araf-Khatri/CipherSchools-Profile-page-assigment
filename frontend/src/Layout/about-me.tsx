@@ -17,7 +17,6 @@ const AboutMe: FC<AboutMeProps> = ({ aboutData }: AboutMeProps) => {
 
   useEffect(() => {
     setAboutInputValue(aboutData);
-    console.log(aboutInputValue)
   }, [aboutData]);
   
   const sendData = () => {
@@ -31,9 +30,6 @@ const AboutMe: FC<AboutMeProps> = ({ aboutData }: AboutMeProps) => {
       return res.data;
     }
     postData()
-      .then((res) => {
-        console.log(res);
-      })
       .catch((err) => {
         console.log(err);
       });
@@ -68,7 +64,7 @@ const AboutMe: FC<AboutMeProps> = ({ aboutData }: AboutMeProps) => {
   } else {
     JSX = (
       <Fragment>
-        <p>{aboutInputValue}</p>
+        <pre className="font-sans ">{aboutInputValue}</pre>
       </Fragment>
     );
   }

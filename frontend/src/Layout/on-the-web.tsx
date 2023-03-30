@@ -1,10 +1,11 @@
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { FaLinkedinIn, FaGithub } from "react-icons/fa";
 import { ImSphere } from "react-icons/im";
 import { BsFacebook, BsTwitter, BsInstagram } from "react-icons/bs";
 import LayoutHeading from "../Components/layout-heading";
 import Section from "../Components/section";
 import SocialLink from "../Components/Socials/social-link";
+import Axios from "axios";
 
 interface SocialLinks {
   linkedIn: String;
@@ -20,15 +21,35 @@ interface SocialWebLinks {
 }
 
 const OntheWeb: FC<SocialWebLinks> = ({ socialData }: SocialWebLinks) => {
+  const userId = localStorage.getItem("userId");
   const [state, setState] = useState<SocialLinks>(socialData);
   const [isEditing, setIsEditing] = useState<Boolean>(false);
 
+  useEffect(() => {
+    setState(socialData)
+  }, [socialData])
+
   const saveSocialLink = () => {
-    console.log(state);
+    const updateUserSocials = async () => {
+      return await Axios.patch(
+        `http://127.0.0.1:3090/api/user/profile/${userId}?type=socials`,
+        state
+      );
+    };
+    updateUserSocials().then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      console.log(err.message)
+    });
   };
-  const updateData = (objKey: String, data: String) => {
-    // setState((state) => ({ ...state, `${objKey}`: data }));
+
+  const updateData = (obj: String, data: String) => {
+    const updatedObj = Object.fromEntries([[obj, data]]);
+    setState((state) => {
+      return { ...state, ...updatedObj };
+    });
   };
+
   const logoClasses = "h-7 w-7 text-slate-600";
   return (
     <div>
@@ -50,14 +71,14 @@ const OntheWeb: FC<SocialWebLinks> = ({ socialData }: SocialWebLinks) => {
                 <FaLinkedinIn />
               </div>
             }
-            key={"linkedIn"}
+            currKey={"linkedIn"}
             social={"LinkedIn"}
             link={state?.linkedIn ?? null}
             isEditing={isEditing}
             setData={updateData}
           />
           <SocialLink
-            key={"github"}
+            currKey={"github"}
             icon={<FaGithub className={`${logoClasses} text-slate-600`} />}
             social={"Github"}
             link={state?.github ?? null}
@@ -65,7 +86,7 @@ const OntheWeb: FC<SocialWebLinks> = ({ socialData }: SocialWebLinks) => {
             setData={updateData}
           />
           <SocialLink
-            key={"facebook"}
+            currKey={"facebook"}
             icon={<BsFacebook className={`${logoClasses}`} />}
             social={"Facebook"}
             link={state?.facebook ?? null}
@@ -73,7 +94,7 @@ const OntheWeb: FC<SocialWebLinks> = ({ socialData }: SocialWebLinks) => {
             setData={updateData}
           />
           <SocialLink
-            key={"twitter"}
+            currKey={"twitter"}
             icon={
               <div
                 className={`grid place-items-center ${logoClasses} rounded-full text-white bg-slate-600`}
@@ -87,7 +108,7 @@ const OntheWeb: FC<SocialWebLinks> = ({ socialData }: SocialWebLinks) => {
             setData={updateData}
           />
           <SocialLink
-            key={"instagram"}
+            currKey={"instagram"}
             icon={
               <div
                 className={`grid place-items-center ${logoClasses} rounded-full text-white bg-slate-600`}
@@ -101,7 +122,7 @@ const OntheWeb: FC<SocialWebLinks> = ({ socialData }: SocialWebLinks) => {
             setData={updateData}
           />
           <SocialLink
-            key={"website"}
+            currKey={"website"}
             icon={<ImSphere className={`${logoClasses}`} />}
             social={"Website"}
             link={state?.website ?? null}

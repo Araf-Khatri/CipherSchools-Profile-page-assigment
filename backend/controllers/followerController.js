@@ -6,13 +6,15 @@ exports.getAllFollowers = catchAsync(async (req, res, next) => {
   const { limit, page } = req.query;
 
   const allFollowers = await Follower.find({ userId: id })
+    .populate("follower")
+    .select("-_id -__v -userId")
     .skip((+page - 1) * +limit)
     .limit(limit);
-
+  const followersArr = allFollowers.map(({ follower: { name, email } }) => ({ name, email }));
   res.status(200).json({
     status: "success",
     length: allFollowers.length,
-    data: allFollowers,
+    data: followersArr,
   });
 });
 

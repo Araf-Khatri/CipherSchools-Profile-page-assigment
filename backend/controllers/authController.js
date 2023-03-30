@@ -36,7 +36,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   userData.password = undefined;
 
-  res.status(200).json({
+  res.status(202).json({
     status: "success",
     data: {
       id: userData._id,

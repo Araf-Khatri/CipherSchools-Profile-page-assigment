@@ -1,8 +1,8 @@
 import { FC } from "react";
 
 interface LayoutHeading {
-  onEdit: React.MouseEventHandler<HTMLButtonElement>;
-  onSave: React.MouseEventHandler<HTMLButtonElement>;
+  onEdit?: React.MouseEventHandler<HTMLButtonElement>;
+  onSave?: React.MouseEventHandler<HTMLButtonElement>;
   heading: String;
   isEditing?: Boolean;
 }

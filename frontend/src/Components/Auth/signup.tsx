@@ -39,16 +39,12 @@ const SignUp: FC<SignupProps> = ({ inputClass }: SignupProps) => {
       passwordConfirmRef.current?.value;
 
     if (!name || !email || !password || !passwordConfirm) {
-      console.log(passwordRef.current, passwordRef.current?.checkValidity());
       return;
     }
 
     const data: SignupData = { name, email, password, passwordConfirm };
 
     sendRequest(data)
-      .then((res) => {
-        console.log(res);
-      })
       .catch((err) => {
         console.log(err);
       });

@@ -22,7 +22,11 @@ const ProfileNav: FC<ProfileNavProps> = ({ profileData }: ProfileNavProps) => {
             <div className="flex flex-col">
               <p className="text-sm text-slate-600">Hello,</p>
               <p className="font-semibold">{profileData?.name}</p>
-              <p className="text-xs text-slate-600">{profileData?.email}</p>
+              {profileData.email && (
+                <p className="text-xs text-slate-600">
+                  {`${"******"}${profileData?.email?.split("@")[1]}`}
+                </p>
+              )}
             </div>
           </div>
           <NavLink to={"/followers"}>
