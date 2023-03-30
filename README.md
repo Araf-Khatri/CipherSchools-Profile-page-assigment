@@ -9,7 +9,7 @@ To run backend:
 . npm run start
 ```
 
-**Frontend**: [WebsiteLink](cipherschool-assignment-by-araf.netlify.app)
+**Frontend**: [Website Link](https://cipherschool-assignment-by-araf.netlify.app/)
 ```
 or
 
