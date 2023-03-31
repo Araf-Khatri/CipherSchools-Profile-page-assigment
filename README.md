@@ -1,6 +1,6 @@
 ## MERN STACK 
 
-**Stack**: MongoDB/Mongoose, Express, ReactJS, NodeJS, TailwindCSS
+**Stack**: MongoDB/Mongoose, Express, ReactJS w/ Typescript, NodeJS, TailwindCSS
 + With Model & Controller architecture
 
 ```
