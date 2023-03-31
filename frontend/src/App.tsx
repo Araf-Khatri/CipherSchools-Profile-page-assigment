@@ -32,7 +32,7 @@ interface UserData {
 }
 
 function App() {
-  localStorage.setItem("userId", "6422c8072641b6df7ed22ae5");
+  // localStorage.setItem("userId", "6422c8072641b6df7ed22ae5");
   const userId = localStorage.getItem("userId");
   const [data, setData] = useState<UserData | undefined>();
   const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
@@ -71,10 +71,11 @@ function App() {
     return (
       <div className="grid place-items-center">
         <PopupAuth />
+        
       </div>
     );
   }
-  console.log(data)
+  console.log(data);
   return (
     <div className="relative App bg-slate-100 text-slate-900">
       <Routes>

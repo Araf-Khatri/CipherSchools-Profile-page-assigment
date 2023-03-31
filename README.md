@@ -6,6 +6,7 @@
 ```
 To run backend:
 . cd backend
+. npm install
 . npm run start
 ```
 
@@ -15,5 +16,6 @@ or
 
 To run frontend:
 . cd frontend
+. npm install
 . npm run dev
 ```

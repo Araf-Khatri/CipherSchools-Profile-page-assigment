@@ -27,7 +27,7 @@ const Login: FC<LoginProps> = ({ inputClass }: LoginProps) => {
     "POST"
   );
 
-  let errorPopup: ReactNode = <div>ABC</div>;
+  let errorPopup: ReactNode;
   useEffect(() => {
     if (error.error) {
       errorPopup = (
@@ -70,6 +70,10 @@ const Login: FC<LoginProps> = ({ inputClass }: LoginProps) => {
     <Fragment>
       {errorPopup}
       <form onSubmit={loginHandler} className="flex flex-col gap-8">
+        <div className="">
+          <p>Email: abcef@gmail.com</p>
+          <p>pass: test1234</p>
+        </div>
         <div>
           <div className="flex flex-col">
             <label htmlFor="email">Email:</label>
